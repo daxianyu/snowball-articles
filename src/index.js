@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
-import { Axios } from 'axios';
-import { Input } from 'antd'
+import { Axios } from "axios";
+import { Input } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 
 const request = new Axios({
-  baseURL: 'https://iyao.daxianyu.cn',
+  baseURL: "https://iyao.daxianyu.cn"
 });
-
-request.get('/query').then(res => console.log(res))
 
 ReactDOM.render(
   <div className="App">
@@ -21,8 +19,37 @@ ReactDOM.render(
 );
 
 function List() {
+  const l = useRef([]);
+  const [list, setList] = useState([]);
   useEffect(() => {
-  }, [])
-
-  return <div>12313</div>;
+    const fetch = async () => {
+      try {
+        const response = await request.get("/query");
+        Promise.all(
+          JSON.parse(response.data).map((id, i) => {
+            return request.get("/query?timeline_id=" + id).then((res) => {
+              l.current[i] = JSON.parse(res.data);
+              setList(l.current);
+            });
+          })
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetch();
+  }, []);
+  console.log(list);
+  return (
+    <div>
+      {list.map((item) => {
+        return (
+          <div key={item.id}>
+            <div dangerouslySetInnerHTML={{ __html: item.text }}></div>:{" "}
+            <span>{item.text}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
