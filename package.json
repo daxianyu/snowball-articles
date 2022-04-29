@@ -1,17 +1,14 @@
 {
   "dependencies": {
-    "react-dom": "latest",
-    "react": "latest",
+    "antd": "latest",
+    "axios": "0.27.2",
     "moment": "latest",
-    "antd": "latest"
+    "react": "latest",
+    "react-dom": "latest"
   },
-  "keywords": [
-    "antd",
-    "ant",
-    "react"
-  ],
-  "name": "ec56nm",
-  "description": "Ant design starter",
+  "keywords": [],
+  "name": "snowball-articles",
+  "description": "",
   "version": "0.0.0",
   "devDependencies": {
     "react-scripts": "1.0.0"
