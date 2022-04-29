@@ -6,7 +6,7 @@ import "antd/dist/antd.css";
 import "./index.css";
 
 const request = new Axios({
-  baseURL: "https://iyao.daxianyu.cn"
+  baseURL: "https://xueqiu-timelines.daxianyu.workers.dev"
 });
 
 ReactDOM.render(
@@ -28,6 +28,7 @@ function List() {
         Promise.all(
           JSON.parse(response.data).map((id, i) => {
             return request.get("/query?timeline_id=" + id).then((res) => {
+              l.current = [...l.current];
               l.current[i] = JSON.parse(res.data);
               setList(l.current);
             });
@@ -39,12 +40,15 @@ function List() {
     };
     fetch();
   }, []);
-  console.log(list);
   return (
     <div>
       {list.map((item) => {
+        if (!item) return null;
         return (
-          <div key={item.id}>
+          <div key={item.id} style={{ margin: "0 15px" }}>
+            <a href={`https://xueqiu.com/${item.author_id}/${item.id}`}>
+              【原文】
+            </a> 
             <span>{item.author}: </span>
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
           </div>
