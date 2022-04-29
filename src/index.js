@@ -45,8 +45,8 @@ function List() {
       {list.map((item) => {
         return (
           <div key={item.id}>
-            <div dangerouslySetInnerHTML={{ __html: item.text }}></div>:{" "}
-            <span>{item.text}</span>
+            <span>{item.author}: </span>
+            <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
           </div>
         );
       })}
