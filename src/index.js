@@ -166,7 +166,10 @@ function List() {
         if (!item) return null;
         return (
           <div key={item.id} style={{ margin: "15px 0" }}>
-            <a href={`https://xueqiu.com/${item.author_id}/${item.id}`}>
+            <a
+              target="__blank"
+              href={`https://xueqiu.com/${item.author_id}/${item.id}`}
+            >
               【原文】
             </a>
             <span>{item.author}: </span>
