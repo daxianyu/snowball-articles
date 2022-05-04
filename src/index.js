@@ -142,13 +142,22 @@ function List() {
       >
         <div>
           <FormItem label="created_at:">
-            <Input onChange={handleChangeInfo("created_at")} />
+            <Input
+              onChange={handleChangeInfo("created_at")}
+              value={info ? info.created_at : ""}
+            />
           </FormItem>
           <FormItem label="description:">
-            <Input onChange={handleChangeInfo("description")} />
+            <Input
+              onChange={handleChangeInfo("description")}
+              value={info ? info.description : ""}
+            />
           </FormItem>
           <FormItem label="text:">
-            <Input onChange={handleChangeInfo("text")} />
+            <Input
+              onChange={handleChangeInfo("text")}
+              value={info ? info.text : ""}
+            />
           </FormItem>
         </div>
       </Modal>
