@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, Modal, Input, Form } from "antd";
+import { Button, Select, Modal, Input, Form, message } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 
@@ -96,8 +96,11 @@ function List() {
       .put("/save", JSON.stringify(info))
       .then((res) => {
         console.log(res);
+        setVisible(false);
+        setInfo(null);
       })
       .catch((err) => {
+        message.error(err);
         console.error(err);
       });
   }
