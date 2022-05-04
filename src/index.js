@@ -88,7 +88,6 @@ function List() {
     setVisible(true);
   };
   function handleCancel() {
-    setInfo(null);
     setVisible(false);
   }
   function handleModify() {
