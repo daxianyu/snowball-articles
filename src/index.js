@@ -82,7 +82,9 @@ function List() {
     newInfo["user_id"] = "2292705444";
     newInfo["target"] = newInfo["user_id"] + "/" + newInfo["id"];
     if (key === "created_at") {
-      newInfo["created_at"] = new Date("2022-" + newInfo[key]).valueOf();
+      if (Number.isNaN(Number(newInfo[key]))) {
+        newInfo["created_at"] = new Date("2022-" + newInfo[key]).valueOf();
+      }
     }
     setInfo(newInfo);
     setVisible(true);
