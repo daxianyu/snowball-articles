@@ -176,6 +176,12 @@ function List() {
             ) : (
               <button onClick={handleChangeInfo("id", item.id)}>补充</button>
             )}
+            <a
+              target="__blank"
+              href={`https://iyao.daxianyu.cn/comments/${item.id}`}
+            >
+              评论
+            </a>
           </div>
         );
       })}
