@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, Modal, Input, Form, message } from "antd";
+import { Button, Select, Modal, Input, Form, message, InputNumber } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -22,6 +22,7 @@ ReactDOM.render(
 function List() {
   const l = useRef([]);
   const [page, setPage] = useState(1);
+  const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
   const [user, setUser] = useState("2292705444");
   const [visible, setVisible] = useState(false);
@@ -176,7 +177,7 @@ function List() {
             </a>
             <div>
               {item.author}发表于
-              {moment(item.created_at).format("YY-MM-DD HH:mm")}{" "}
+              {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
             </div>
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
             {item.text ? (
@@ -194,7 +195,7 @@ function List() {
         );
       })}
 
-      <div>
+      <div style={{ marginTop: 10}}>
         <Button
           onClick={() => {
             setPage(page - 1);
@@ -209,6 +210,14 @@ function List() {
           }}
         >
           下一页
+        </Button>
+        <InputNumber min={1} value={tempPage} onChange={(v) => setTempPage(v)}/>
+        <Button
+          onClick={() => {
+            setPage(tempPage);
+          }}
+        >
+          跳转
         </Button>
       </div>
     </div>
