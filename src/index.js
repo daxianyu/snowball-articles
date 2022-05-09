@@ -195,10 +195,11 @@ function List() {
         );
       })}
 
-      <div style={{ marginTop: 10}}>
+      <div style={{ marginTop: 10 }}>
         <Button
           onClick={() => {
             setPage(page - 1);
+            setTempPage(page - 1);
           }}
           disabled={page <= 1}
         >
@@ -207,11 +208,16 @@ function List() {
         <Button
           onClick={() => {
             setPage(page + 1);
+            setTempPage(page + 1);
           }}
         >
           下一页
         </Button>
-        <InputNumber min={1} value={tempPage} onChange={(v) => setTempPage(v)}/>
+        <InputNumber
+          min={1}
+          value={tempPage}
+          onChange={(v) => setTempPage(v)}
+        />
         <Button
           onClick={() => {
             setPage(tempPage);
