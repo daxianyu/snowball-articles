@@ -4,6 +4,7 @@ import { Axios } from "axios";
 import { Button, Select, Modal, Input, Form, message } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
+import moment from "moment";
 
 const FormItem = Form.Item;
 const request = new Axios({
@@ -173,7 +174,10 @@ function List() {
             >
               【原文】
             </a>
-            <span>{item.author}: </span>
+            <div>
+              {item.author}发表于
+              {moment(item.created_at).format("YY-MM-DD HH:mm")}{" "}
+            </div>
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
             {item.text ? (
               ""
