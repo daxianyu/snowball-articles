@@ -71,7 +71,7 @@ function List() {
               【原文】
             </a>
             <div>
-              {item.author}发表于
+              {item.author} 发表于{" "}
               {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
             </div>
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
