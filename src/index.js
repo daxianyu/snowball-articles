@@ -12,7 +12,7 @@ const request = new Axios({
 
 ReactDOM.render(
   <div className="App">
-    <h1>雪球文章搜索</h1>
+    <h2>雪球快照</h2>
     <List />
   </div>,
   document.getElementById("root")
