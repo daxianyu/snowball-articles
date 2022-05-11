@@ -39,7 +39,6 @@ function List() {
       try {
         const response = await utilsRequest.get("/users");
         const users = JSON.parse(response.data);
-        console.log(users);
         setUserList(users);
       } catch (err) {
         console.log(JSON.stringify(err));
@@ -78,10 +77,6 @@ function List() {
               {u}
             </Select.Option>
           ))}
-          <Select.Option value="2292705444">2292705444</Select.Option>
-          <Select.Option value="4316634246">4316634246</Select.Option>
-          <Select.Option value="1553799558">1553799558</Select.Option>
-          <Select.Option value="6174633204">6174633204</Select.Option>
         </Select>
       </div>
       {list.map((item) => {
