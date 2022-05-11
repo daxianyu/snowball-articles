@@ -5,6 +5,7 @@ import { Button, Select, InputNumber } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
+import SearchSelect from "./SearchSelect";
 
 const request = new Axios({
   baseURL: "https://iyao.daxianyu.cn"
@@ -78,7 +79,10 @@ function List() {
             </Select.Option>
           ))}
         </Select>
+
+        <SearchSelect style={{ width: 200 }} />
       </div>
+
       {list.map((item) => {
         if (!item) return null;
         return (
