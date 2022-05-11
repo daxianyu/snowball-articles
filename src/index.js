@@ -10,6 +10,10 @@ const request = new Axios({
   baseURL: "https://iyao.daxianyu.cn"
 });
 
+const utilsRequest = new Axios({
+  baseURL: "https://utils.daxianyu.cn"
+});
+
 ReactDOM.render(
   <div className="App">
     <h2>雪球快照</h2>
@@ -23,11 +27,26 @@ function List() {
   const [page, setPage] = useState(1);
   const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [user, setUser] = useState("2292705444");
   function handleChangeUser(userId) {
     setPage(1);
     setUser(userId);
   }
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const response = await utilsRequest.get("/users");
+        const users = JSON.parse(response.data);
+        console.log(users);
+        setUserList(users);
+      } catch (err) {
+        console.log(JSON.stringify(err));
+      }
+    };
+    fetch();
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
@@ -54,6 +73,11 @@ function List() {
     <div>
       <div>
         <Select value={user} onChange={handleChangeUser}>
+          {userList.map((u) => (
+            <Select.Option value={u} key={u}>
+              {u}
+            </Select.Option>
+          ))}
           <Select.Option value="2292705444">2292705444</Select.Option>
           <Select.Option value="4316634246">4316634246</Select.Option>
           <Select.Option value="1553799558">1553799558</Select.Option>
