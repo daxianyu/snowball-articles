@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, InputNumber } from "antd";
+import { Button, Select, InputNumber, message } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -30,23 +30,54 @@ function List() {
   const [list, setList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [user, setUser] = useState("2292705444");
+  const [toSub, setToSub] = useState(null);
   function handleChangeUser(userId) {
     setPage(1);
+    setTempPage(1);
     setUser(userId);
+  }
+  async function fetchUserList() {
+    try {
+      const response = await utilsRequest.get("/users");
+      const users = JSON.parse(response.data);
+      setUserList(users);
+    } catch (err) {
+      console.log(JSON.stringify(err));
+    }
   }
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await utilsRequest.get("/users");
-        const users = JSON.parse(response.data);
-        setUserList(users);
-      } catch (err) {
-        console.log(JSON.stringify(err));
-      }
-    };
-    fetch();
+    fetchUserList();
   }, []);
+
+  function isSubscribed(sub) {
+    if (!sub) return false;
+    return userList.indexOf(+sub.value) > -1;
+  }
+
+  function subscribe(subId, name) {
+    async function subscribeFetch() {
+      try {
+        await request.get(`/subscribe?id=${subId}&name=${name}`);
+        await fetchUserList();
+      } catch (err) {
+        message.error(err.message);
+      }
+    }
+    subscribeFetch();
+  }
+
+  function unSubscribe(subId) {
+    async function unSubscribeFetch() {
+      try {
+        await request.get("/unsubscribe?id=" + subId);
+        await fetchUserList();
+      } catch (err) {
+        message.error(err.message);
+      }
+    }
+    unSubscribeFetch();
+  }
 
   useEffect(() => {
     const fetch = async () => {
@@ -69,6 +100,7 @@ function List() {
     };
     fetch();
   }, [page, user]);
+
   return (
     <div>
       <div>
@@ -80,7 +112,33 @@ function List() {
           ))}
         </Select>
 
-        <SearchSelect style={{ width: 200 }} />
+        <SearchSelect
+          style={{ width: 150, marginLeft: 10 }}
+          value={toSub}
+          onChange={(sub) => {
+            setToSub(sub);
+          }}
+        />
+        {toSub ? (
+          isSubscribed(toSub) ? (
+            <Button
+              onClick={() => {
+                unSubscribe(toSub.value);
+              }}
+            >
+              取消监听
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                subscribe(toSub.value, toSub.text);
+              }}
+            >
+              监听
+            </Button>
+          )
+        ) : null}
+        {toSub ? <Button>订阅</Button> : null}
       </div>
 
       {list.map((item) => {
@@ -100,7 +158,7 @@ function List() {
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
             <a
               target="__blank"
-              href={`https://iyao.daxianyu.cn/comments/${item.id}`}
+              href={`https://utils.daxianyu.cn/comments/${item.id}`}
             >
               评论
             </a>

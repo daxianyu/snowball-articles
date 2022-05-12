@@ -26,7 +26,7 @@ function fetch(value, callback) {
         if (currentValue === value) {
           callback(
             d.map((x) => ({
-              value: x[1],
+              value: `${x[1]}`,
               text: x[0]
             }))
           );
@@ -34,7 +34,7 @@ function fetch(value, callback) {
       });
   }
 
-  timeout = setTimeout(fake, 300);
+  timeout = setTimeout(fake, 1000);
 }
 
 export default class SearchInput extends React.Component {
@@ -52,7 +52,13 @@ export default class SearchInput extends React.Component {
   };
 
   handleChange = (value) => {
-    this.setState({ value });
+    let newSub = null;
+    this.state.data.forEach((sub) => {
+      if (sub.value === value) {
+        newSub = sub;
+      }
+    });
+    this.props.onChange(newSub);
   };
 
   render() {
@@ -62,12 +68,13 @@ export default class SearchInput extends React.Component {
     return (
       <Select
         showSearch
-        value={this.state.value}
+        value={this.props.value && this.props.value.value}
         placeholder={this.props.placeholder}
         style={this.props.style}
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
+        allowClear
         onSearch={this.handleSearch}
         onChange={this.handleChange}
         notFoundContent={null}
