@@ -11,10 +11,6 @@ const request = new Axios({
   baseURL: "https://sbservice.daxianyu.cn"
 });
 
-const utilsRequest = new Axios({
-  baseURL: "https://utils.daxianyu.cn"
-});
-
 ReactDOM.render(
   <div className="App">
     <h2>雪球快照</h2>
@@ -29,7 +25,7 @@ function List() {
   const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
   const [userList, setUserList] = useState([]);
-  const [user, setUser] = useState("2292705444");
+  const [user, setUser] = useState(2292705444);
   const [toSub, setToSub] = useState(null);
   function handleChangeUser(userId) {
     setPage(1);
@@ -38,7 +34,7 @@ function List() {
   }
   async function fetchUserList() {
     try {
-      const response = await utilsRequest.get("/users");
+      const response = await request.get("/userlist");
       const users = JSON.parse(response.data);
       setUserList(users);
     } catch (err) {
@@ -58,7 +54,10 @@ function List() {
   function subscribe(subId, name) {
     async function subscribeFetch() {
       try {
-        await request.get(`/subscribe?id=${subId}&name=${name}`);
+        await request.post(`/subscribe`, {
+          id: subId,
+          name: name
+        });
         await fetchUserList();
       } catch (err) {
         message.error(err.message);
@@ -70,7 +69,7 @@ function List() {
   function unSubscribe(subId) {
     async function unSubscribeFetch() {
       try {
-        await request.get("/unsubscribe?id=" + subId);
+        await request.delete("/unsubscribe?id=" + subId);
         await fetchUserList();
       } catch (err) {
         message.error(err.message);
@@ -106,8 +105,8 @@ function List() {
       <div>
         <Select value={user} onChange={handleChangeUser}>
           {userList.map((u) => (
-            <Select.Option value={u} key={u}>
-              {u}
+            <Select.Option value={u.id} key={u.name}>
+              {u.name}
             </Select.Option>
           ))}
         </Select>
