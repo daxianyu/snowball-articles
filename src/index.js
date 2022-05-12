@@ -44,9 +44,9 @@ function List() {
       const response = await request.get("/userlist");
       const users = JSON.parse(response.data);
       setUserList(users);
-      setUser(users[0] || "");
+      setUser(users.length ? users[0].id : "");
     } catch (err) {
-      console.log(JSON.stringify(err));
+      console.error(JSON.stringify(err));
     }
   }
 
@@ -55,6 +55,7 @@ function List() {
       if (res.status === 401) {
         setLoginVisibility(true);
       }
+      return res;
     });
     fetchUserList();
   }, []);
