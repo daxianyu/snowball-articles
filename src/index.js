@@ -6,9 +6,15 @@ import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
 import SearchSelect from "./SearchSelect";
+import Login from "./Login";
+
+const token = localStorage.getItem("token");
 
 const request = new Axios({
-  baseURL: "https://sbservice.daxianyu.cn"
+  baseURL: "https://sbservice.daxianyu.cn",
+  headers: {
+    token
+  }
 });
 
 ReactDOM.render(
@@ -25,8 +31,9 @@ function List() {
   const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
   const [userList, setUserList] = useState([]);
-  const [user, setUser] = useState(2292705444);
+  const [user, setUser] = useState("");
   const [toSub, setToSub] = useState(null);
+  const [loginVisible, setLoginVisibility] = useState(false);
   function handleChangeUser(userId) {
     setPage(1);
     setTempPage(1);
@@ -37,6 +44,7 @@ function List() {
       const response = await request.get("/userlist");
       const users = JSON.parse(response.data);
       setUserList(users);
+      setUser(users[0] || "");
     } catch (err) {
       console.log(JSON.stringify(err));
     }
@@ -44,6 +52,11 @@ function List() {
 
   useEffect(() => {
     fetchUserList();
+    request.interceptors.response.use((res) => {
+      if (res.status === 401) {
+        setLoginVisibility(true);
+      }
+    });
   }, []);
 
   function isSubscribed(sub) {
@@ -97,7 +110,9 @@ function List() {
         console.log(err);
       }
     };
-    fetch();
+    if (user) {
+      fetch();
+    }
   }, [page, user]);
 
   return (
@@ -198,6 +213,7 @@ function List() {
           跳转
         </Button>
       </div>
+      <Login visible={loginVisible} onChangeVisibility={setLoginVisibility} />
     </div>
   );
 }
