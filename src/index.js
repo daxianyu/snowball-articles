@@ -48,16 +48,16 @@ function List() {
 
   function isSubscribed(sub) {
     if (!sub) return false;
-    return userList.indexOf(+sub.value) > -1;
+    return userList.some((u) => u.id === +sub.value);
   }
 
   function subscribe(subId, name) {
     async function subscribeFetch() {
       try {
-        await request.post(`/subscribe`, {
-          id: subId,
-          name: name
-        });
+        await request.post(
+          `/subscribe`,
+          JSON.stringify({ id: subId, name: name })
+        );
         await fetchUserList();
       } catch (err) {
         message.error(err.message);
