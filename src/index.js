@@ -157,7 +157,7 @@ function List() {
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
             <a
               target="__blank"
-              href={`https://utils.daxianyu.cn/comments/${item.id}`}
+              href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
             >
               评论
             </a>
