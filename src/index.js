@@ -51,12 +51,12 @@ function List() {
   }
 
   useEffect(() => {
-    fetchUserList();
     request.interceptors.response.use((res) => {
       if (res.status === 401) {
         setLoginVisibility(true);
       }
     });
+    fetchUserList();
   }, []);
 
   function isSubscribed(sub) {
