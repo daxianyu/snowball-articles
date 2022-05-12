@@ -155,12 +155,14 @@ function List() {
               {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
             </div>
             <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
-            <a
-              target="__blank"
-              href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
-            >
-              评论
-            </a>
+            <div>
+              <a
+                target="__blank"
+                href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
+              >
+                评论
+              </a>
+            </div>
           </div>
         );
       })}
