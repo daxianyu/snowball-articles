@@ -10,6 +10,7 @@ import Login from "./Login";
 import Pubkey from "./Pubkey";
 
 const token = localStorage.getItem("token");
+const lastSuber = localStorage.getItem("suber");
 
 const request = new Axios({
   baseURL: "https://sbservice.daxianyu.cn",
@@ -34,7 +35,7 @@ function List() {
   const [page, setPage] = useState(1);
   const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(+lastSuber);
   const [toSub, setToSub] = useState(null);
   const [loginVisible, setLoginVisibility] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -42,6 +43,7 @@ function List() {
     setPage(1);
     setTempPage(1);
     setUser(userId);
+    localStorage.setItem("suber", userId);
   }
   async function fetchUserList() {
     try {
