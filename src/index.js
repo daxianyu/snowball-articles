@@ -79,7 +79,7 @@ function List() {
 
   function isSubscribed(sub) {
     if (!sub) return false;
-    return currentUser.subs.some((u) => u.id === +sub.value);
+    return currentUser.subs.some((u) => u === +sub.value);
   }
 
   function subscribe(subId, name) {
@@ -109,6 +109,7 @@ function List() {
       }
     }
     unSubscribeFetch();
+    unListen(subId);
   }
 
   function listen(subId) {
