@@ -7,6 +7,7 @@ import "./index.css";
 import moment from "moment";
 import SearchSelect from "./SearchSelect";
 import Login from "./Login";
+import Pubkey from "./Pubkey";
 
 const token = localStorage.getItem("token");
 
@@ -20,6 +21,7 @@ const request = new Axios({
 ReactDOM.render(
   <div className="App">
     <h2>雪球快照</h2>
+    <Pubkey />
     <List />
   </div>,
   document.getElementById("root")
@@ -60,7 +62,7 @@ function List() {
       const userInfo = JSON.parse(response.data);
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
-      if (user && userInfo.subs.indexOf(user) === -1) {
+      if (!user || userInfo.subs.indexOf(user) === -1) {
         setUser(userInfo.subs.length ? userInfo.subs[0] : "");
       }
     } catch (err) {
@@ -68,6 +70,7 @@ function List() {
     }
   }
 
+  // 初始化
   useEffect(() => {
     request.interceptors.response.use((res) => {
       if (res.status === 401) {
