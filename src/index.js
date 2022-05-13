@@ -7,7 +7,7 @@ import "./index.css";
 import moment from "moment";
 import SearchSelect from "./SearchSelect";
 import Login from "./Login";
-// import Pubkey from "./Pubkey"
+import Pubkey from "./Pubkey";
 
 const token = localStorage.getItem("token");
 const lastSuber = localStorage.getItem("suber");
@@ -22,7 +22,6 @@ const request = new Axios({
 ReactDOM.render(
   <div className="App">
     <h2>XUEQIU SNOWBALL</h2>
-    {/* <Pubkey /> */}
     <List />
   </div>,
   document.getElementById("root")
@@ -39,6 +38,7 @@ function List() {
   const [subers, setSubers] = useState([]);
   const [toSub, setToSub] = useState(null);
   const [loginVisible, setLoginVisibility] = useState(false);
+  const [pushVisible, setPushVisibility] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   function handleChangeUser(userId) {
     setPage(1);
@@ -144,6 +144,10 @@ function List() {
   }
 
   function listen(subId) {
+    if (!currentUser.key) {
+      setPushVisibility(true);
+      return;
+    }
     async function listenFetch() {
       try {
         await request.post(`/listen`, JSON.stringify({ id: subId }));
@@ -186,6 +190,13 @@ function List() {
 
   return (
     <div>
+      {currentUser ? (
+        <Pubkey
+          user={currentUser}
+          visible={pushVisible}
+          onClose={() => setPushVisibility()}
+        />
+      ) : null}
       <div>
         <div style={{ display: subers.length ? "block" : "none" }}>
           {(currentUser.subs.length && (
@@ -326,6 +337,7 @@ function List() {
         >
           跳转
         </Button>
+        <Button onClick={() => setPushVisibility(true)}>推送设置</Button>
       </div>
     </div>
   );

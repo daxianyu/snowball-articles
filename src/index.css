@@ -3,12 +3,19 @@
     background-color: black;
     color: #eeeeee;
   }
+  h2 {
+    color: #eeeeee;
+  }
 }
 
 @media (prefers-color-scheme: light) {
   body {
     background-color: white;
   }
+}
+
+img {
+  max-width: 100%;
 }
 
 .App {
