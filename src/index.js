@@ -60,7 +60,9 @@ function List() {
       const userInfo = JSON.parse(response.data);
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
-      setUser(userInfo.subs.length ? userInfo.subs[0] : "");
+      if (user && userInfo.subs.indexOf(user) === -1) {
+        setUser(userInfo.subs.length ? userInfo.subs[0] : "");
+      }
     } catch (err) {
       console.error(JSON.stringify(err));
     }
@@ -160,25 +162,30 @@ function List() {
     }
   }, [page, user]);
 
+  if (!currentUser) {
+    return (
+      <Login visible={loginVisible} onChangeVisibility={setLoginVisibility} />
+    );
+  }
+
   return (
     <div>
       <div>
-        {(currentUser && currentUser.subs.length && (
+        {(currentUser.subs.length && (
           <Select
             style={{ width: 150, marginRight: 10 }}
             value={user}
             onChange={handleChangeUser}
           >
-            {currentUser &&
-              currentUser.subs.map((subId) => {
-                const u = userMap[subId];
-                if (!u) return null;
-                return (
-                  <Select.Option value={u.id} key={u.name}>
-                    {u.name}
-                  </Select.Option>
-                );
-              })}
+            {currentUser.subs.map((subId) => {
+              const u = userMap[subId];
+              if (!u) return null;
+              return (
+                <Select.Option value={u.id} key={u.name}>
+                  {u.name}
+                </Select.Option>
+              );
+            })}
           </Select>
         )) ||
           null}
@@ -289,7 +296,6 @@ function List() {
           跳转
         </Button>
       </div>
-      <Login visible={loginVisible} onChangeVisibility={setLoginVisibility} />
     </div>
   );
 }
