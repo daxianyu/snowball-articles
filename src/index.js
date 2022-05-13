@@ -201,7 +201,7 @@ function List() {
         <div style={{ display: subers.length ? "block" : "none" }}>
           {(currentUser.subs.length && (
             <Select
-              style={{ width: 150, marginRight: 10 }}
+              style={{ width: 130, marginRight: 10 }}
               value={user}
               onChange={handleChangeUser}
             >
@@ -251,7 +251,7 @@ function List() {
         </div>
         <div style={{ marginTop: 10 }}>
           <SearchSelect
-            style={{ width: 150, marginRight: 10 }}
+            style={{ width: 130, marginRight: 10 }}
             value={toSub}
             placeholder="搜索🔍用户"
             onChange={(sub) => {
