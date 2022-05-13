@@ -7,7 +7,7 @@ import "./index.css";
 import moment from "moment";
 import SearchSelect from "./SearchSelect";
 import Login from "./Login";
-import Pubkey from "./Pubkey";
+// import Pubkey from "./Pubkey"
 
 const token = localStorage.getItem("token");
 const lastSuber = localStorage.getItem("suber");
@@ -103,7 +103,7 @@ function List() {
     });
     fetchUserList();
     fetchCurrentUser();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function isSubscribed(sub) {
     if (!sub) return false;
