@@ -238,7 +238,7 @@ function List() {
           <SearchSelect
             style={{ width: 150, marginRight: 10 }}
             value={toSub}
-            placeholder="搜索🔍"
+            placeholder="搜索🔍用户"
             onChange={(sub) => {
               setToSub(sub);
             }}
