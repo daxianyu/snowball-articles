@@ -203,7 +203,7 @@ function List() {
         )) ||
           null}
         {user ? (
-          <>
+          <React.Fragment>
             {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
               <Button
                 onClick={() => {
@@ -224,7 +224,7 @@ function List() {
             <Button onClick={handleRefresh}>
               {spinning ? <Spin /> : "刷新"}
             </Button>
-          </>
+          </React.Fragment>
         ) : null}
         <div style={{ marginTop: 10 }}>
           <SearchSelect
