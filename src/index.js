@@ -117,6 +117,7 @@ function List() {
           `/subscribe`,
           JSON.stringify({ id: subId, name: name })
         );
+        setToSub(null);
         await fetchUserList();
         await fetchCurrentUser();
       } catch (err) {
@@ -203,14 +204,14 @@ function List() {
         )) ||
           null}
         {user ? (
-          <React.Fragment>
+          <Button.Group>
             {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
               <Button
                 onClick={() => {
                   unListen(user);
                 }}
               >
-                取消推送
+                取推
               </Button>
             ) : (
               <Button
@@ -221,15 +222,23 @@ function List() {
                 推送
               </Button>
             )}
+            <Button
+              onClick={() => {
+                unSubscribe(toSub.value);
+              }}
+            >
+              取关
+            </Button>
             <Button onClick={handleRefresh}>
               {spinning ? <Spin /> : "刷新"}
             </Button>
-          </React.Fragment>
+          </Button.Group>
         ) : null}
         <div style={{ marginTop: 10 }}>
           <SearchSelect
             style={{ width: 150, marginRight: 10 }}
             value={toSub}
+            placeholder="搜索🔍"
             onChange={(sub) => {
               setToSub(sub);
             }}
@@ -241,7 +250,7 @@ function List() {
                   unSubscribe(toSub.value);
                 }}
               >
-                取消监听
+                取关
               </Button>
             ) : (
               <Button
@@ -249,7 +258,7 @@ function List() {
                   subscribe(toSub.value, toSub.text);
                 }}
               >
-                监听
+                关注
               </Button>
             )
           ) : null}

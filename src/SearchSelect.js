@@ -40,12 +40,16 @@ function fetch(value, callback) {
 export default class SearchInput extends React.Component {
   state = {
     data: [],
-    value: undefined
+    value: undefined,
+    loading: false
   };
 
   handleSearch = (value) => {
     if (value) {
-      fetch(value, (data) => this.setState({ data }));
+      this.setState({ loading: true });
+      fetch(value, (data) => {
+        this.setState({ data, loading: false });
+      });
     } else {
       this.setState({ data: [] });
     }
@@ -75,6 +79,7 @@ export default class SearchInput extends React.Component {
         showArrow={false}
         filterOption={false}
         allowClear
+        loading={this.state.loading}
         onSearch={this.handleSearch}
         onChange={this.handleChange}
         notFoundContent={null}
