@@ -21,7 +21,7 @@ const request = new Axios({
 
 ReactDOM.render(
   <div className="App">
-    <h2>雪球快照</h2>
+    <h2>XUEQIU SNOWBALL</h2>
     {/* <Pubkey /> */}
     <List />
   </div>,
@@ -36,6 +36,7 @@ function List() {
   const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
   const [user, setUser] = useState(+lastSuber);
+  const [subers, setSubers] = useState([]);
   const [toSub, setToSub] = useState(null);
   const [loginVisible, setLoginVisibility] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -53,6 +54,7 @@ function List() {
       users.forEach((u) => {
         map[u.id] = u;
       });
+      setSubers(users);
       setUserMap(map);
     } catch (err) {
       console.error(JSON.stringify(err));
@@ -185,55 +187,57 @@ function List() {
   return (
     <div>
       <div>
-        {(currentUser.subs.length && (
-          <Select
-            style={{ width: 150, marginRight: 10 }}
-            value={user}
-            onChange={handleChangeUser}
-          >
-            {currentUser.subs.map((subId) => {
-              const u = userMap[subId];
-              if (!u) return null;
-              return (
-                <Select.Option value={u.id} key={u.name}>
-                  {u.name}
-                </Select.Option>
-              );
-            })}
-          </Select>
-        )) ||
-          null}
-        {user ? (
-          <Button.Group>
-            {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
-              <Button
-                onClick={() => {
-                  unListen(user);
-                }}
-              >
-                取推
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  listen(user);
-                }}
-              >
-                推送
-              </Button>
-            )}
-            <Button
-              onClick={() => {
-                unSubscribe(user);
-              }}
+        <div style={{ display: subers.length ? "block" : "none" }}>
+          {(currentUser.subs.length && (
+            <Select
+              style={{ width: 150, marginRight: 10 }}
+              value={user}
+              onChange={handleChangeUser}
             >
-              取关
-            </Button>
-            <Button onClick={handleRefresh}>
-              {spinning ? <Spin /> : "刷新"}
-            </Button>
-          </Button.Group>
-        ) : null}
+              {currentUser.subs.map((subId) => {
+                const u = userMap[subId];
+                if (!u) return null;
+                return (
+                  <Select.Option value={u.id} key={u.name}>
+                    {u.name}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          )) ||
+            null}
+          {user ? (
+            <Button.Group>
+              {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
+                <Button
+                  onClick={() => {
+                    unListen(user);
+                  }}
+                >
+                  取推
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    listen(user);
+                  }}
+                >
+                  推送
+                </Button>
+              )}
+              <Button
+                onClick={() => {
+                  unSubscribe(user);
+                }}
+              >
+                取关
+              </Button>
+              <Button onClick={handleRefresh}>
+                {spinning ? <Spin /> : "刷新"}
+              </Button>
+            </Button.Group>
+          ) : null}
+        </div>
         <div style={{ marginTop: 10 }}>
           <SearchSelect
             style={{ width: 150, marginRight: 10 }}
