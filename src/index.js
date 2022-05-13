@@ -224,7 +224,7 @@ function List() {
             )}
             <Button
               onClick={() => {
-                unSubscribe(toSub.value);
+                unSubscribe(user);
               }}
             >
               取关
