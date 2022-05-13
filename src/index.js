@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, InputNumber, message } from "antd";
+import { Button, Select, InputNumber, message, Spin } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -21,7 +21,7 @@ const request = new Axios({
 ReactDOM.render(
   <div className="App">
     <h2>雪球快照</h2>
-    <Pubkey />
+    {/* <Pubkey /> */}
     <List />
   </div>,
   document.getElementById("root")
@@ -29,6 +29,7 @@ ReactDOM.render(
 
 function List() {
   const l = useRef([]);
+  const [spinning, setSpinning] = useState(false);
   const [userMap, setUserMap] = useState({});
   const [page, setPage] = useState(1);
   const [tempPage, setTempPage] = useState(1);
@@ -67,6 +68,26 @@ function List() {
       }
     } catch (err) {
       console.error(JSON.stringify(err));
+    }
+  }
+
+  async function fetchPageList(user, page) {
+    try {
+      const response = await request.get(`/query?user=${user}&page=${page}`);
+      l.current = [];
+      setList(l.current);
+      setSpinning(false);
+      Promise.all(
+        JSON.parse(response.data).map((id, i) => {
+          return request.get("/query?timeline_id=" + id).then((res) => {
+            l.current = [...l.current];
+            l.current[i] = JSON.parse(res.data);
+            setList(l.current);
+          });
+        })
+      );
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -142,28 +163,15 @@ function List() {
   }
 
   useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await request.get(`/query?user=${user}&page=${page}`);
-        l.current = [];
-        setList(l.current);
-        Promise.all(
-          JSON.parse(response.data).map((id, i) => {
-            return request.get("/query?timeline_id=" + id).then((res) => {
-              l.current = [...l.current];
-              l.current[i] = JSON.parse(res.data);
-              setList(l.current);
-            });
-          })
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    };
     if (user) {
-      fetch();
+      fetchPageList(user, page);
     }
   }, [page, user]);
+
+  function handleRefresh() {
+    fetchPageList(user, page);
+    setSpinning(true);
+  }
 
   if (!currentUser) {
     return (
@@ -193,23 +201,28 @@ function List() {
         )) ||
           null}
         {user ? (
-          currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
-            <Button
-              onClick={() => {
-                unListen(user);
-              }}
-            >
-              取消推送
+          <>
+            {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
+              <Button
+                onClick={() => {
+                  unListen(user);
+                }}
+              >
+                取消推送
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  listen(user);
+                }}
+              >
+                推送
+              </Button>
+            )}
+            <Button onClick={handleRefresh}>
+              {spinning ? <Spin /> : "刷新"}
             </Button>
-          ) : (
-            <Button
-              onClick={() => {
-                listen(user);
-              }}
-            >
-              推送
-            </Button>
-          )
+          </>
         ) : null}
         <div style={{ marginTop: 10 }}>
           <SearchSelect
