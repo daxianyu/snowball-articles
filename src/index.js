@@ -19,6 +19,13 @@ const request = new Axios({
   }
 });
 
+request.interceptors.response.use((res) => {
+  if (res.status === 401 || res.status === 500) {
+    message.warning(res.data);
+  }
+  return res;
+});
+
 ReactDOM.render(
   <div className="App">
     <h2>XUEQIU SNOWBALL</h2>
@@ -64,6 +71,9 @@ function List() {
   async function fetchCurrentUser() {
     try {
       const response = await request.get("/userInfo");
+      if (response.status === 401) {
+        setLoginVisibility(true);
+      }
       const userInfo = JSON.parse(response.data);
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
@@ -97,12 +107,6 @@ function List() {
 
   // 初始化
   useEffect(() => {
-    request.interceptors.response.use((res) => {
-      if (res.status === 401) {
-        setLoginVisibility(true);
-      }
-      return res;
-    });
     fetchUserList();
     fetchCurrentUser();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -219,7 +223,7 @@ function List() {
             null}
           {user ? (
             <Button.Group>
-              {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
+              {(currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
                 <Button
                   onClick={() => {
                     unListen(user);
@@ -235,7 +239,7 @@ function List() {
                 >
                   推送
                 </Button>
-              )}
+              ))}
               <Button
                 onClick={() => {
                   unSubscribe(user);

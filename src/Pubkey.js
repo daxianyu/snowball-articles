@@ -9,6 +9,13 @@ const contentStyle = {
   maxWidth: "80%"
 };
 
+request.interceptors.response.use((res) => {
+  if (res.status === 401 || res.status === 500) {
+    message.warning(res.data);
+  }
+  return res;
+});
+
 export default function Pubkey(props) {
   const [img1, setImg1] = useState();
   const [img2, setImg2] = useState();
