@@ -194,7 +194,7 @@ function List() {
 
   return (
     <div>
-      {currentUser ? (
+      {currentUser && pushVisible ? (
         <Pubkey
           user={currentUser}
           visible={pushVisible}
