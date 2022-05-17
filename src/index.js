@@ -137,7 +137,6 @@ function List() {
     async function unSubscribeFetch() {
       try {
         await request.delete("/unsubscribe?id=" + subId);
-        await fetchUserList();
         await fetchCurrentUser();
       } catch (err) {
         message.error(err.message);
