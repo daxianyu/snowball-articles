@@ -8,6 +8,7 @@ import moment from "moment";
 import SearchSelect from "./SearchSelect";
 import Login from "./Login";
 import Pubkey from "./Pubkey";
+import ButtonGroup from "antd/lib/button/button-group";
 
 const token = localStorage.getItem("token");
 const lastSuber = localStorage.getItem("suber");
@@ -222,7 +223,7 @@ function List() {
             null}
           {user ? (
             <Button.Group>
-              {(currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
+              {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
                 <Button
                   onClick={() => {
                     unListen(user);
@@ -238,7 +239,7 @@ function List() {
                 >
                   推送
                 </Button>
-              ))}
+              )}
               <Button
                 onClick={() => {
                   unSubscribe(user);
@@ -311,23 +312,25 @@ function List() {
       })}
 
       <div style={{ marginTop: 10 }}>
-        <Button
-          onClick={() => {
-            setPage(page - 1);
-            setTempPage(page - 1);
-          }}
-          disabled={page <= 1}
-        >
-          上一页
-        </Button>
-        <Button
-          onClick={() => {
-            setPage(page + 1);
-            setTempPage(page + 1);
-          }}
-        >
-          下一页
-        </Button>
+        <Button.Group>
+          <Button
+            onClick={() => {
+              setPage(page - 1);
+              setTempPage(page - 1);
+            }}
+            disabled={page <= 1}
+          >
+            上一页
+          </Button>
+          <Button
+            onClick={() => {
+              setPage(page + 1);
+              setTempPage(page + 1);
+            }}
+          >
+            下一页
+          </Button>
+        </Button.Group>
         <InputNumber
           min={1}
           value={tempPage}
@@ -340,7 +343,18 @@ function List() {
         >
           跳转
         </Button>
-        <Button onClick={() => setPushVisibility(true)}>推送设置</Button>
+        <div>
+          <Button type="link" onClick={() => setPushVisibility(true)}>
+            推送设置
+          </Button>
+          <Button type="link" onClick={() => setLoginVisibility(true)}>
+            登录
+          </Button>
+          <Login
+            visible={loginVisible}
+            onChangeVisibility={setLoginVisibility}
+          />
+        </div>
       </div>
     </div>
   );
