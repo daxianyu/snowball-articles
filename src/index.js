@@ -8,6 +8,7 @@ import moment from "moment";
 import SearchSelect from "./SearchSelect";
 import Pubkey from "./Pubkey";
 import Login from "./Login";
+import Comment from "./Comment";
 
 const lastSuber = localStorage.getItem("suber");
 
@@ -44,6 +45,7 @@ function List() {
   const [loginVisible, setLoginVisibility] = useState(false);
   const [pushVisible, setPushVisibility] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [commentInfo, setCommentInfo] = useState(null);
   function handleChangeUser(userId) {
     setPage(1);
     setTempPage(1);
@@ -322,17 +324,30 @@ function List() {
               </div>
               <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
               <div>
-                <a
-                  target="__blank"
-                  href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
+                <span
+                  type="link"
+                  className="ant-btn-link link"
+                  onClick={() => {
+                    setCommentInfo({
+                      visible: true,
+                      url: `https://sbservice.daxianyu.cn/comments/${item.id}`
+                    });
+                  }}
                 >
                   【评论】
-                </a>
+                </span>
               </div>
             </div>
           );
         })}
       </div>
+      {commentInfo && (
+        <Comment
+          visible={commentInfo.visible}
+          commentUrl={commentInfo.url}
+          onClose={() => setCommentInfo(null)}
+        />
+      )}
       <div style={{ marginTop: 10 }}>
         <Button.Group>
           <Button
@@ -366,9 +381,12 @@ function List() {
           跳转
         </Button>
         <div>
-          <Button type="link" onClick={() => setPushVisibility(true)}>
+          <span
+            className="ant-btn-link link"
+            onClick={() => setPushVisibility(true)}
+          >
             推送设置
-          </Button>
+          </span>
           {(!currentUser ||
             !currentUser.name ||
             currentUser.name === "guest") && (

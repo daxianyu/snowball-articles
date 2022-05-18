@@ -33,3 +33,13 @@ img {
 .card img {
   max-width: 100%;
 }
+
+.link {
+  cursor: pointer;
+}
+
+.comment-iframe {
+  width: 100%;
+  border: none;
+  min-height: 340px;
+}
