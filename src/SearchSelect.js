@@ -46,10 +46,14 @@ export default class SearchInput extends React.Component {
     searched: false
   };
 
-  static getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps(props, state) {
+    const prelist = props.preList.map((s) => ({
+      text: s.name,
+      value: `${s.id}`
+    }));
     return {
-      data: props.preList.map((s) => ({ text: s.name, value: `${s.id}` })),
-      prelist: props.preList.map((s) => ({ text: s.name, value: `${s.id}` }))
+      data: state.searched ? state.data : prelist,
+      prelist
     };
   }
 
@@ -66,6 +70,9 @@ export default class SearchInput extends React.Component {
 
   handleChange = (value) => {
     let newSub = null;
+    if (!value) {
+      this.setState({ data: [...this.state.prelist] });
+    }
     this.state.data.forEach((sub) => {
       if (sub.value === value) {
         newSub = sub;
