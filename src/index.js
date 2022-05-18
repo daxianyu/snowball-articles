@@ -6,8 +6,8 @@ import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
 import SearchSelect from "./SearchSelect";
-import Login from "./Login";
 import Pubkey from "./Pubkey";
+import Login from "./Login";
 
 const token = localStorage.getItem("token");
 const lastSuber = localStorage.getItem("suber");
@@ -175,11 +175,11 @@ function List() {
   }
 
   function handleLogout() {
-    localStorage.delete("token");
+    localStorage.removeItem("token");
     async function Logout() {
       try {
         await request.get("/logout");
-        await fetchCurrentUser();
+        window.location.reload();
       } catch (err) {
         message.error(err.message);
       }
