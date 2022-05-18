@@ -78,7 +78,7 @@ function List() {
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
       if (!user || userInfo.subs.indexOf(user) === -1) {
-        setUser(userInfo.subs.length ? userInfo.subs[0] : "");
+        setUser(userInfo.subs.length ? userInfo.subs[0] : "2292705444");
       }
     } catch (err) {
       console.error(JSON.stringify(err));
@@ -174,12 +174,35 @@ function List() {
     unListenFetch();
   }
 
+  function handleLogout() {
+    localStorage.delete("token");
+    async function Logout() {
+      try {
+        await request.get("/logout");
+        await fetchCurrentUser();
+      } catch (err) {
+        message.error(err.message);
+      }
+    }
+    Logout();
+  }
+
   useEffect(() => {
-    message.warning("请先选择或搜索用户进行关注！");
     if (user) {
       fetchPageList(user, page);
+    } else {
+      if (page > 1) {
+        message.warning("请先选择或搜索用户进行关注！");
+      }
     }
   }, [page, user]);
+
+  function handleChangeToSub(sub) {
+    setToSub(sub);
+    if (currentUser.name === "guest" && !currentUser.subs.length && sub) {
+      fetchPageList(sub.value, page);
+    }
+  }
 
   function handleRefresh() {
     fetchPageList(user, page);
@@ -221,7 +244,7 @@ function List() {
             </Select>
           )) ||
             null}
-          {user ? (
+          {user && currentUser.subs.indexOf(+user) > -1 ? (
             <Button.Group>
               {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
                 <Button
@@ -260,7 +283,7 @@ function List() {
             placeholder="🔍搜索用户"
             preList={subers}
             onChange={(sub) => {
-              setToSub(sub);
+              handleChangeToSub(sub);
             }}
           />
           {toSub ? (
@@ -285,33 +308,34 @@ function List() {
         </div>
       </div>
 
-      {list.map((item) => {
-        if (!item) return null;
-        return (
-          <div className="card" key={item.id}>
-            <a
-              target="__blank"
-              href={`https://xueqiu.com/${item.author_id}/${item.id}`}
-            >
-              【原文】
-            </a>
-            <div>
-              {item.author} 发表于{" "}
-              {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
-            </div>
-            <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
-            <div>
+      <div style={{ minHeight: 250 }}>
+        {list.map((item) => {
+          if (!item) return null;
+          return (
+            <div className="card" key={item.id}>
               <a
                 target="__blank"
-                href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
+                href={`https://xueqiu.com/${item.author_id}/${item.id}`}
               >
-                【评论】
+                【原文】
               </a>
+              <div>
+                {item.author} 发表于{" "}
+                {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
+              </div>
+              <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
+              <div>
+                <a
+                  target="__blank"
+                  href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
+                >
+                  【评论】
+                </a>
+              </div>
             </div>
-          </div>
-        );
-      })}
-
+          );
+        })}
+      </div>
       <div style={{ marginTop: 10 }}>
         <Button.Group>
           <Button
@@ -351,6 +375,11 @@ function List() {
           <Button type="link" onClick={() => setLoginVisibility(true)}>
             登录
           </Button>
+          {currentUser && currentUser.name && currentUser.name !== "guest" && (
+            <Button type="link" onClick={() => handleLogout()}>
+              注销
+            </Button>
+          )}
           <Login
             visible={loginVisible}
             onChangeVisibility={setLoginVisibility}
