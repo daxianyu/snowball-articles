@@ -17,17 +17,7 @@ request.interceptors.response.use((res) => {
 });
 
 export default function Pubkey(props) {
-  const [img1, setImg1] = useState();
-  const [img2, setImg2] = useState();
   const [key, setKey] = useState(props.user.key);
-  useEffect(() => {
-    request.get("/image/appstore_pushdeer").then((res) => {
-      setImg1(res.data);
-    });
-    request.get("/image/pushdeer_key").then((res) => {
-      setImg2(res.data);
-    });
-  }, []);
 
   function submit() {
     request
@@ -57,10 +47,18 @@ export default function Pubkey(props) {
     >
       <Carousel autoplay>
         <div>
-          {img1 ? <img alt="图1" style={contentStyle} src={img1} /> : null}
+          <img
+            alt="图1"
+            style={contentStyle}
+            src="https://s3.bmp.ovh/imgs/2022/05/18/c4600e6284d5dc97.jpg"
+          />
         </div>
         <div>
-          {img2 ? <img alt="图1" style={contentStyle} src={img2} /> : null}
+          <img
+            alt="图1"
+            style={contentStyle}
+            src="https://s3.bmp.ovh/imgs/2022/05/18/c12a97b2230973ae.jpg"
+          />
         </div>
       </Carousel>
       <Input
