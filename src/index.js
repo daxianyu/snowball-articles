@@ -175,6 +175,7 @@ function List() {
   }
 
   useEffect(() => {
+    message.warning("请先选择或搜索用户进行关注！");
     if (user) {
       fetchPageList(user, page);
     }
@@ -256,7 +257,8 @@ function List() {
           <SearchSelect
             style={{ width: 130, marginRight: 10 }}
             value={toSub}
-            placeholder="搜索🔍用户"
+            placeholder="🔍搜索用户"
+            preList={subers}
             onChange={(sub) => {
               setToSub(sub);
             }}

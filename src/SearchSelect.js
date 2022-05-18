@@ -41,17 +41,26 @@ export default class SearchInput extends React.Component {
   state = {
     data: [],
     value: undefined,
-    loading: false
+    loading: false,
+    prelist: [],
+    searched: false
   };
+
+  static getDerivedStateFromProps(props) {
+    return {
+      data: props.preList.map((s) => ({ text: s.name, value: `${s.id}` })),
+      prelist: props.preList.map((s) => ({ text: s.name, value: `${s.id}` }))
+    };
+  }
 
   handleSearch = (value) => {
     if (value) {
-      this.setState({ loading: true });
+      this.setState({ loading: true, searched: true });
       fetch(value, (data) => {
         this.setState({ data, loading: false });
       });
     } else {
-      this.setState({ data: [] });
+      this.setState({ data: [...this.state.prelist] });
     }
   };
 
