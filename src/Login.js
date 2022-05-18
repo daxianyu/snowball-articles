@@ -3,7 +3,8 @@ import { Axios } from "axios";
 import { Input, Modal, message, Form } from "antd";
 
 const request = new Axios({
-  baseURL: "https://sbservice.daxianyu.cn"
+  baseURL: "https://sbservice.daxianyu.cn",
+  withCredentials: true
 });
 
 const FormItem = Form.Item;
