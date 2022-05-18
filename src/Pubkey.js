@@ -47,18 +47,10 @@ export default function Pubkey(props) {
     >
       <Carousel autoplay>
         <div>
-          <img
-            alt="图1"
-            style={contentStyle}
-            src="https://s3.bmp.ovh/imgs/2022/05/18/c4600e6284d5dc97.jpg"
-          />
+          <img alt="图1" style={contentStyle} src="./pushkey1.jpeg" />
         </div>
         <div>
-          <img
-            alt="图1"
-            style={contentStyle}
-            src="https://s3.bmp.ovh/imgs/2022/05/18/c12a97b2230973ae.jpg"
-          />
+          <img alt="图1" style={contentStyle} src="./pushkey2.jpeg" />
         </div>
       </Carousel>
       <Input
