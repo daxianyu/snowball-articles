@@ -66,6 +66,8 @@ export default function Pubkey(props) {
       <Input
         placeholder="填入生成的Key"
         value={key}
+        autocapitalize="off"
+        autocorrect="off"
         onChange={(e) => setKey(e.target.value)}
       />
     </Modal>

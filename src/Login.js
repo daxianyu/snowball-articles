@@ -57,6 +57,8 @@ export default function Login(props) {
             placeholder="用户名"
             name="name"
             value={userInfo.name}
+            autocapitalize="off"
+            autocorrect="off"
             onChange={onChangeUserInfo("name")}
           />
         </FormItem>
