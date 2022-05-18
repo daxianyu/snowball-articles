@@ -34,7 +34,7 @@ function fetch(value, callback) {
       });
   }
 
-  timeout = setTimeout(fake, 400);
+  timeout = setTimeout(fake, 1000);
 }
 
 export default class SearchInput extends React.Component {

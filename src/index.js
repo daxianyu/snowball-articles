@@ -372,9 +372,13 @@ function List() {
           <Button type="link" onClick={() => setPushVisibility(true)}>
             推送设置
           </Button>
-          <Button type="link" onClick={() => setLoginVisibility(true)}>
-            登录
-          </Button>
+          {(!currentUser ||
+            !currentUser.name ||
+            currentUser.name === "guest") && (
+            <Button type="link" onClick={() => setLoginVisibility(true)}>
+              登录
+            </Button>
+          )}
           {currentUser && currentUser.name && currentUser.name !== "guest" && (
             <Button type="link" onClick={() => handleLogout()}>
               注销
