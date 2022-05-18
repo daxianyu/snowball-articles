@@ -7,7 +7,10 @@ const request = new Axios({
 });
 
 const FormItem = Form.Item;
-
+const layout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 18 }
+};
 export default function Login(props) {
   const [userInfo, setUserInfo] = useState({
     name: void 0,
@@ -52,25 +55,29 @@ export default function Login(props) {
         visible={props.visible}
         width={400}
       >
-        <FormItem label="用户名">
-          <Input
-            placeholder="用户名"
-            name="name"
-            value={userInfo.name}
-            autocapitalize="off"
-            autocorrect="off"
-            onChange={onChangeUserInfo("name")}
-          />
-        </FormItem>
-        <FormItem label="密码">
-          <Input
-            placeholder="密码"
-            name="password"
-            type="password"
-            value={userInfo.pwd}
-            onChange={onChangeUserInfo("pwd")}
-          />
-        </FormItem>
+        <Form {...layout} layout="horizontal">
+          <FormItem label="用户名">
+            <Input
+              placeholder="用户名"
+              name="name"
+              width={150}
+              value={userInfo.name}
+              autocapitalize="off"
+              autocorrect="off"
+              onChange={onChangeUserInfo("name")}
+            />
+          </FormItem>
+          <FormItem label="密码">
+            <Input
+              placeholder="密码"
+              width={150}
+              name="password"
+              type="password"
+              value={userInfo.pwd}
+              onChange={onChangeUserInfo("pwd")}
+            />
+          </FormItem>
+        </Form>
       </Modal>
     </div>
   );
