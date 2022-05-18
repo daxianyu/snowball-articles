@@ -14,6 +14,7 @@ const lastSuber = localStorage.getItem("suber");
 
 const request = new Axios({
   baseURL: "https://sbservice.daxianyu.cn",
+  withCredentials: true,
   headers: {
     token
   }
