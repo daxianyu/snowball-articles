@@ -303,7 +303,7 @@ function List() {
                 target="__blank"
                 href={`https://sbservice.daxianyu.cn/comments/${item.id}`}
               >
-                评论
+                【评论】
               </a>
             </div>
           </div>
