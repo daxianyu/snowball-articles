@@ -9,15 +9,11 @@ import SearchSelect from "./SearchSelect";
 import Pubkey from "./Pubkey";
 import Login from "./Login";
 
-const token = localStorage.getItem("token");
 const lastSuber = localStorage.getItem("suber");
 
 const request = new Axios({
   baseURL: "https://sbservice.daxianyu.cn",
-  withCredentials: true,
-  headers: {
-    token
-  }
+  withCredentials: true
 });
 
 request.interceptors.response.use((res) => {
