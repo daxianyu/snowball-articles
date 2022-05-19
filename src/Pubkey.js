@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input, Modal, Carousel, message } from "antd";
 import { request } from "./request";
 const contentStyle = {
@@ -47,11 +47,14 @@ export default function Pubkey(props) {
     >
       <Carousel autoplay>
         <div>
+          <span>首先在应用商店下载pushdeer软件，务必允许推送</span>
           <img alt="图1" style={contentStyle} src="./pushkey1.jpeg" />
         </div>
         <div>
+          <span>将软件key页面生成的key保存在下方的文本框中</span>
           <img alt="图1" style={contentStyle} src="./pushkey2.jpeg" />
         </div>
+        <div>设置成功后便会收到一条推送成功通知。</div>
       </Carousel>
       <Input
         placeholder="填入生成的Key"

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, InputNumber, message, Spin } from "antd";
+import { Button, Select, InputNumber, message, Spin, Tooltip } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -67,17 +67,28 @@ function List() {
     }
   }
 
+  async function fetchMsg() {
+    const response = await request.get("/msg");
+    if (response.data) {
+      message.info(response.data, 5);
+    }
+  }
+
   async function fetchCurrentUser() {
     try {
       const response = await request.get("/userInfo");
       if (response.status === 401) {
         setLoginVisibility(true);
+        return;
       }
       const userInfo = JSON.parse(response.data);
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
       if (!user || userInfo.subs.indexOf(user) === -1) {
         setUser(userInfo.subs.length ? userInfo.subs[0] : "2292705444");
+      }
+      if (!userInfo || userInfo.name === "guest") {
+        fetchMsg();
       }
     } catch (err) {
       console.error(JSON.stringify(err));
@@ -174,7 +185,6 @@ function List() {
   }
 
   function handleLogout() {
-    localStorage.removeItem("token");
     async function Logout() {
       try {
         await request.get("/logout");
@@ -246,13 +256,15 @@ function List() {
           {user && currentUser.subs.indexOf(+user) > -1 ? (
             <Button.Group>
               {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
-                <Button
-                  onClick={() => {
-                    unListen(user);
-                  }}
-                >
-                  取推
-                </Button>
+                <Tooltip title="确认？">
+                  <Button
+                    onClick={() => {
+                      unListen(user);
+                    }}
+                  >
+                    取推
+                  </Button>
+                </Tooltip>
               ) : (
                 <Button
                   onClick={() => {
@@ -262,13 +274,15 @@ function List() {
                   推送
                 </Button>
               )}
-              <Button
-                onClick={() => {
-                  unSubscribe(user);
-                }}
-              >
-                取关
-              </Button>
+              <Tooltip title="确认？">
+                <Button
+                  onClick={() => {
+                    unSubscribe(user);
+                  }}
+                >
+                  取关
+                </Button>
+              </Tooltip>
               <Button onClick={handleRefresh}>
                 {spinning ? <Spin /> : "刷新"}
               </Button>
@@ -287,13 +301,15 @@ function List() {
           />
           {toSub ? (
             isSubscribed(toSub) ? (
-              <Button
-                onClick={() => {
-                  unSubscribe(toSub.value);
-                }}
-              >
-                取关
-              </Button>
+              <Tooltip title="确认？">
+                <Button
+                  onClick={() => {
+                    unSubscribe(toSub.value);
+                  }}
+                >
+                  取关
+                </Button>
+              </Tooltip>
             ) : (
               <Button
                 onClick={() => {
