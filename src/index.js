@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, InputNumber, message, Spin, Tooltip } from "antd";
+import { Button, Select, InputNumber, message, Spin, Popconfirm } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -256,15 +256,14 @@ function List() {
           {user && currentUser.subs.indexOf(+user) > -1 ? (
             <Button.Group>
               {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
-                <Tooltip title="确认？">
-                  <Button
-                    onClick={() => {
-                      unListen(user);
-                    }}
-                  >
-                    取推
-                  </Button>
-                </Tooltip>
+                <Popconfirm
+                  onConfirm={() => {
+                    unListen(user);
+                  }}
+                  title="确认？"
+                >
+                  <Button>取推</Button>
+                </Popconfirm>
               ) : (
                 <Button
                   onClick={() => {
@@ -274,15 +273,14 @@ function List() {
                   推送
                 </Button>
               )}
-              <Tooltip title="确认？">
-                <Button
-                  onClick={() => {
-                    unSubscribe(user);
-                  }}
-                >
-                  取关
-                </Button>
-              </Tooltip>
+              <Popconfirm
+                title="确认？"
+                onConfirm={() => {
+                  unSubscribe(user);
+                }}
+              >
+                <Button>取关</Button>
+              </Popconfirm>
               <Button onClick={handleRefresh}>
                 {spinning ? <Spin /> : "刷新"}
               </Button>
@@ -301,15 +299,14 @@ function List() {
           />
           {toSub ? (
             isSubscribed(toSub) ? (
-              <Tooltip title="确认？">
-                <Button
-                  onClick={() => {
-                    unSubscribe(toSub.value);
-                  }}
-                >
-                  取关
-                </Button>
-              </Tooltip>
+              <Popconfirm
+                title="确认？"
+                onConfirm={() => {
+                  unSubscribe(toSub.value);
+                }}
+              >
+                <Button>取关</Button>
+              </Popconfirm>
             ) : (
               <Button
                 onClick={() => {
