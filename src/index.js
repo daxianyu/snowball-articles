@@ -412,11 +412,14 @@ function List() {
               注销
             </Button>
           )}
-          <Login
-            visible={loginVisible}
-            onChangeVisibility={setLoginVisibility}
-          />
+          {currentUser && currentUser.name && currentUser.name !== "guest" && (
+            <span>
+              有效期至：
+              {moment(currentUser.expired_at).format("YYYY-MM-DD HH:mm")}
+            </span>
+          )}
         </div>
+        <Login visible={loginVisible} onChangeVisibility={setLoginVisibility} />
       </div>
     </div>
   );
