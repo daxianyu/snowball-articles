@@ -17,6 +17,12 @@ const request = new Axios({
   withCredentials: true
 });
 
+const sUserAgent = navigator.userAgent;
+let isMobile = false;
+if (sUserAgent.indexOf("Android") > -1 || sUserAgent.indexOf("iPhone") > -1) {
+  isMobile = true;
+}
+
 request.interceptors.response.use((res) => {
   if (res.status === 401 || res.status === 500) {
     message.warning(res.data);
@@ -235,23 +241,40 @@ function List() {
       ) : null}
       <div>
         <div style={{ display: subers.length ? "block" : "none" }}>
-          {(currentUser.subs.length && (
-            <Select
-              style={{ width: 130, marginRight: 10 }}
-              value={user}
-              onChange={handleChangeUser}
-            >
-              {currentUser.subs.map((subId) => {
-                const u = userMap[subId];
-                if (!u) return null;
-                return (
-                  <Select.Option value={u.id} key={u.name}>
-                    {u.name}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          )) ||
+          {(currentUser.subs.length &&
+            (isMobile ? (
+              <select
+                style={{ width: 130, marginRight: 10 }}
+                value={user}
+                onChange={handleChangeUser}
+              >
+                {currentUser.subs.map((subId) => {
+                  const u = userMap[subId];
+                  if (!u) return null;
+                  return (
+                    <option value={u.id} key={u.name}>
+                      {u.name}
+                    </option>
+                  );
+                })}
+              </select>
+            ) : (
+              <Select
+                style={{ width: 130, marginRight: 10 }}
+                value={user}
+                onChange={handleChangeUser}
+              >
+                {currentUser.subs.map((subId) => {
+                  const u = userMap[subId];
+                  if (!u) return null;
+                  return (
+                    <Select.Option value={u.id} key={u.name}>
+                      {u.name}
+                    </Select.Option>
+                  );
+                })}
+              </Select>
+            ))) ||
             null}
           {user && currentUser.subs.indexOf(+user) > -1 ? (
             <Button.Group>
