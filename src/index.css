@@ -49,4 +49,7 @@ img {
   font-size: 14px;
   padding: 6px;
   color: black;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
 }
