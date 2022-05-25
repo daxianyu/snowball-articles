@@ -289,7 +289,7 @@ function List() {
         </div>
         <div style={{ marginTop: 10 }}>
           <SearchSelect
-            style={{ width: 130, marginRight: 10 }}
+            style={{ width: 255, marginRight: 10 }}
             value={toSub}
             placeholder="🔍搜索用户"
             preList={subers}
