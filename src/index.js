@@ -18,7 +18,7 @@ const request = new Axios({
 });
 
 const sUserAgent = navigator.userAgent;
-let isMobile = false;
+let isMobile = true;
 if (sUserAgent.indexOf("Android") > -1 || sUserAgent.indexOf("iPhone") > -1) {
   isMobile = true;
 }
@@ -53,6 +53,9 @@ function List() {
   const [currentUser, setCurrentUser] = useState(null);
   const [commentInfo, setCommentInfo] = useState(null);
   function handleChangeUser(userId) {
+    if (isMobile) {
+      userId = userId.target.value;
+    }
     setPage(1);
     setTempPage(1);
     setUser(userId);
@@ -244,6 +247,7 @@ function List() {
           {(currentUser.subs.length &&
             (isMobile ? (
               <select
+                className="user-select"
                 style={{ width: 130, marginRight: 10 }}
                 value={user}
                 onChange={handleChangeUser}

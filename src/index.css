@@ -43,3 +43,10 @@ img {
   border: none;
   min-height: 340px;
 }
+
+.user-select {
+  line-height: 1.5715;
+  font-size: 14px;
+  padding: 6px;
+  color: black;
+}
