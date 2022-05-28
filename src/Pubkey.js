@@ -26,8 +26,9 @@ export default function Pubkey(props) {
         if (res.data === "success") {
           message.success("请查看是否收到推送消息！");
           props.onClose();
+          return;
         }
-        message.error("设置失败");
+        message.success("设置失败");
       })
       .catch((err) => {
         message.error("设置失败");
