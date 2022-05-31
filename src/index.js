@@ -93,7 +93,7 @@ function List() {
       const userInfo = JSON.parse(response.data);
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
-      if (!user || userInfo.subs.indexOf(user) === -1) {
+      if (!user || userInfo.subs.indexOf(+user) === -1) {
         setUser(userInfo.subs.length ? userInfo.subs[0] : "2292705444");
       }
       if (!userInfo || userInfo.name === "guest") {
