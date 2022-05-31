@@ -8,7 +8,7 @@ export default function Comments(props) {
       visible={props.visible}
       onCancel={props.onClose}
       onOk={props.onClose}
-      title="评论详情"
+      title={<span onDoubleClick={props.onReComment}>评论详情</span>}
     >
       <iframe
         className="comment-iframe"

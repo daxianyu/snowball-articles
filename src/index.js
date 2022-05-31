@@ -227,6 +227,10 @@ function List() {
     setSpinning(true);
   }
 
+  function handleReComment() {
+    request.get("/recomment?id=" + commentInfo.id);
+  }
+
   if (!currentUser) {
     return (
       <Login visible={loginVisible} onChangeVisibility={setLoginVisibility} />
@@ -370,6 +374,7 @@ function List() {
                   onClick={() => {
                     setCommentInfo({
                       visible: true,
+                      id: item.id,
                       url: `https://sbservice.daxianyu.cn/comments/${item.id}`
                     });
                   }}
@@ -385,6 +390,7 @@ function List() {
         <Comment
           visible={commentInfo.visible}
           commentUrl={commentInfo.url}
+          onReComment={handleReComment}
           onClose={() => setCommentInfo(null)}
         />
       )}
