@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
 import { Button, Select, InputNumber, message, Spin, Popconfirm } from "antd";
@@ -39,7 +39,6 @@ ReactDOM.render(
 );
 
 function List() {
-  const l = useRef([]);
   const [spinning, setSpinning] = useState(false);
   const [userMap, setUserMap] = useState({});
   const [page, setPage] = useState(1);
@@ -354,7 +353,7 @@ function List() {
         </div>
       </div>
 
-      <div style={{ minHeight: 250 }}>
+      <Spin style={{ minHeight: 250 }} spinning={spinning}>
         {list.map((item) => {
           if (!item) return null;
           return (
@@ -369,10 +368,9 @@ function List() {
                 {item.author} 发表于{" "}
                 {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
               </div>
-              <span dangerouslySetInnerHTML={{ __html: item.text }}></span>
+              <span dangerouslySetInnerHTML={{ __html: item.text }} />
               <div>
                 <span
-                  type="link"
                   className="ant-btn-link link"
                   onClick={() => {
                     setCommentInfo({
@@ -388,7 +386,7 @@ function List() {
             </div>
           );
         })}
-      </div>
+      </Spin>
       {commentInfo && (
         <Comment
           visible={commentInfo.visible}
