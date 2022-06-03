@@ -58,13 +58,13 @@ export default class SearchInput extends React.Component {
   }
 
   handleSearch = (value) => {
-    if (value) {
+    if (!value || !value.trim()) {
+      this.setState({ data: [...this.state.prelist] });
+    } else {
       this.setState({ loading: true, searched: true });
       fetch(value, (data) => {
         this.setState({ data, loading: false });
       });
-    } else {
-      this.setState({ data: [...this.state.prelist] });
     }
   };
 
