@@ -106,19 +106,22 @@ function List() {
 
   async function fetchPageList(user, page) {
     try {
-      const response = await request.get(`/query?user=${user}&page=${page}`);
-      l.current = [];
-      setList(l.current);
+      setSpinning(true);
+      const response = await request.get(`/queryList?user=${user}&page=${page}`);
+      setList(JSON.parse(response.data));
       setSpinning(false);
-      Promise.all(
-        JSON.parse(response.data).map((id, i) => {
-          return request.get("/query?timeline_id=" + id).then((res) => {
-            l.current = [...l.current];
-            l.current[i] = JSON.parse(res.data);
-            setList(l.current);
-          });
-        })
-      );
+      // l.current = [];
+      // setList(l.current);
+      // setSpinning(false);
+      // Promise.all(
+      //   JSON.parse(response.data).map((id, i) => {
+      //     return request.get("/query?timeline_id=" + id).then((res) => {
+      //       l.current = [...l.current];
+      //       l.current[i] = JSON.parse(res.data);
+      //       setList(l.current);
+      //     });
+      //   })
+      // );
     } catch (err) {
       console.log(err);
     }
