@@ -44,20 +44,19 @@ function List() {
   const [page, setPage] = useState(1);
   const [tempPage, setTempPage] = useState(1);
   const [list, setList] = useState([]);
-  const [user, setUser] = useState(+lastSuber);
+  const [suberId, setSuberId] = useState(+lastSuber);
   const [subers, setSubers] = useState([]);
-  const [toSub, setToSub] = useState(null);
   const [loginVisible, setLoginVisibility] = useState(false);
   const [pushVisible, setPushVisibility] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [commentInfo, setCommentInfo] = useState(null);
-  function handleChangeUser(userId) {
-    if (isMobile) {
+  function handleChangeSuber(userId) {
+    if (userId && userId.target) {
       userId = userId.target.value;
     }
     setPage(1);
     setTempPage(1);
-    setUser(userId);
+    setSuberId(userId);
     localStorage.setItem("suber", userId);
   }
   async function fetchUserList() {
@@ -92,8 +91,8 @@ function List() {
       const userInfo = JSON.parse(response.data);
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
-      if (!user || userInfo.subs.indexOf(+user) === -1) {
-        setUser(userInfo.subs.length ? userInfo.subs[0] : "2292705444");
+      if (!suberId || userInfo.subs.indexOf(+suberId) === -1) {
+        setSuberId(userInfo.subs.length ? userInfo.subs[0] : "2292705444");
       }
       if (!userInfo || userInfo.name === "guest") {
         fetchMsg();
@@ -106,21 +105,11 @@ function List() {
   async function fetchPageList(user, page) {
     try {
       setSpinning(true);
-      const response = await request.get(`/queryList?user=${user}&page=${page}`);
+      const response = await request.get(
+        `/queryList?user=${user}&page=${page}`
+      );
       setList(JSON.parse(response.data));
       setSpinning(false);
-      // l.current = [];
-      // setList(l.current);
-      // setSpinning(false);
-      // Promise.all(
-      //   JSON.parse(response.data).map((id, i) => {
-      //     return request.get("/query?timeline_id=" + id).then((res) => {
-      //       l.current = [...l.current];
-      //       l.current[i] = JSON.parse(res.data);
-      //       setList(l.current);
-      //     });
-      //   })
-      // );
     } catch (err) {
       console.log(err);
     }
@@ -132,11 +121,6 @@ function List() {
     fetchCurrentUser();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function isSubscribed(sub) {
-    if (!sub) return false;
-    return currentUser.subs.some((u) => u === +sub.value);
-  }
-
   function subscribe(subId, name) {
     async function subscribeFetch() {
       try {
@@ -144,7 +128,6 @@ function List() {
           `/subscribe`,
           JSON.stringify({ id: subId, name: name })
         );
-        setToSub(null);
         await fetchUserList();
         await fetchCurrentUser();
       } catch (err) {
@@ -208,24 +191,25 @@ function List() {
   }
 
   useEffect(() => {
-    if (user) {
-      fetchPageList(user, page);
+    if (suberId) {
+      fetchPageList(suberId, page);
     } else {
       if (page > 1) {
         message.warning("请先选择或搜索用户进行关注！");
       }
     }
-  }, [page, user]);
+  }, [page, suberId]);
 
   function handleChangeToSub(sub) {
-    setToSub(sub);
     if (currentUser.name === "guest" && !currentUser.subs.length && sub) {
       fetchPageList(sub.value, page);
+    } else {
+      handleChangeSuber(sub.value)
     }
   }
 
   function handleRefresh() {
-    fetchPageList(user, page);
+    fetchPageList(suberId, page);
     setSpinning(true);
   }
 
@@ -255,8 +239,8 @@ function List() {
               <select
                 className="user-select"
                 style={{ width: 130, marginRight: 10 }}
-                value={user}
-                onChange={handleChangeUser}
+                value={suberId}
+                onChange={handleChangeSuber}
               >
                 {currentUser.subs.map((subId) => {
                   const u = userMap[subId];
@@ -271,8 +255,8 @@ function List() {
             ) : (
               <Select
                 style={{ width: 130, marginRight: 10 }}
-                value={user}
-                onChange={handleChangeUser}
+                value={suberId}
+                onChange={handleChangeSuber}
               >
                 {currentUser.subs.map((subId) => {
                   const u = userMap[subId];
@@ -285,13 +269,13 @@ function List() {
                 })}
               </Select>
             ))) ||
-            null}
-          {user && currentUser.subs.indexOf(+user) > -1 ? (
+          null}
+          {suberId && currentUser.subs.indexOf(+suberId) > -1 ? (
             <Button.Group>
-              {currentUser.listen && currentUser.listen.indexOf(+user) > -1 ? (
+              {currentUser.listen && currentUser.listen.indexOf(+suberId) > -1 ? (
                 <Popconfirm
                   onConfirm={() => {
-                    unListen(user);
+                    unListen(suberId);
                   }}
                   title="确认？"
                 >
@@ -300,7 +284,7 @@ function List() {
               ) : (
                 <Button
                   onClick={() => {
-                    listen(user);
+                    listen(suberId);
                   }}
                 >
                   推送
@@ -309,7 +293,7 @@ function List() {
               <Popconfirm
                 title="确认？"
                 onConfirm={() => {
-                  unSubscribe(user);
+                  unSubscribe(suberId);
                 }}
               >
                 <Button>取关</Button>
@@ -323,33 +307,17 @@ function List() {
         <div style={{ marginTop: 10 }}>
           <SearchSelect
             style={{ width: 255, marginRight: 10 }}
-            value={toSub}
-            placeholder="🔍搜索用户"
+            placeholder="🔍 搜索用户"
             preList={subers}
+            user={currentUser}
+            onListen={listen}
+            onUnListen={unListen}
+            onSub={subscribe}
+            onUnSub={unSubscribe}
             onChange={(sub) => {
               handleChangeToSub(sub);
             }}
           />
-          {toSub ? (
-            isSubscribed(toSub) ? (
-              <Popconfirm
-                title="确认？"
-                onConfirm={() => {
-                  unSubscribe(toSub.value);
-                }}
-              >
-                <Button>取关</Button>
-              </Popconfirm>
-            ) : (
-              <Button
-                onClick={() => {
-                  subscribe(toSub.value, toSub.text);
-                }}
-              >
-                关注
-              </Button>
-            )
-          ) : null}
         </div>
       </div>
 
@@ -368,8 +336,14 @@ function List() {
                 {item.author} 发表于{" "}
                 {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
               </div>
-              <span dangerouslySetInnerHTML={{ __html: item.text || item.description }} />
-              {item.description && item.firstImg ? <img alt="封面" src={item.firstImg} /> : null }
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: item.text || item.description
+                }}
+              />
+              {item.description && item.firstImg ? (
+                <img alt="封面" src={item.firstImg} />
+              ) : null}
               <div>
                 <span
                   className="ant-btn-link link"
