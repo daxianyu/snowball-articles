@@ -132,7 +132,7 @@ export default class SearchInput extends React.Component {
             pagination={{
               pageSize: 8,
               showLessItems: true,
-              size: "small"
+              // size: "small"
             }}
             dataSource={this.state.data}
             renderItem={(item) => {
@@ -141,7 +141,7 @@ export default class SearchInput extends React.Component {
               const subId = item.value;
 
               return (
-                <List.Item>
+                <List.Item style={{ padding: '4px 8px'}}>
                   <Typography.Text style={{ textDecoration: 'underline'}} onClick={this.handlePeep(item)}>
                     {item.text}
                   </Typography.Text>
