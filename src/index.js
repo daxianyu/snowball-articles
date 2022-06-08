@@ -369,6 +369,7 @@ function List() {
                 {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
               </div>
               <span dangerouslySetInnerHTML={{ __html: item.text || item.description }} />
+              {item.description && item.firstImg ? <img alt="封面" src={item.firstImg} /> : null }
               <div>
                 <span
                   className="ant-btn-link link"
