@@ -368,7 +368,7 @@ function List() {
                 {item.author} 发表于{" "}
                 {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
               </div>
-              <span dangerouslySetInnerHTML={{ __html: item.text }} />
+              <span dangerouslySetInnerHTML={{ __html: item.text || item.description }} />
               <div>
                 <span
                   className="ant-btn-link link"
