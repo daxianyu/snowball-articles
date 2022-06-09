@@ -154,12 +154,12 @@ export default class SearchInput extends React.Component {
                           }}
                           title="确认？"
                         >
-                          <Button type="primary">
+                          <Button type="primary" size="small">
                             取关
                           </Button>
                         </Popconfirm>
                       ) : (
-                        <Button onClick={() => this.handleSubscribe(subId, item.text)}>
+                        <Button size="small" onClick={() => this.handleSubscribe(subId, item.text)}>
                           关注
                         </Button>
                       )
@@ -172,12 +172,12 @@ export default class SearchInput extends React.Component {
                           }}
                           title="确认？"
                         >
-                          <Button type="primary" disabled={!isSubed}>
+                          <Button type="primary" size="small">
                             取推
                           </Button>
                         </Popconfirm>
                       ) : (
-                        <Button onClick={() => this.handleListen(subId)} >
+                        <Button size="small" onClick={() => this.handleListen(subId)} disabled={!isSubed}>
                           推送
                         </Button>
                       )
