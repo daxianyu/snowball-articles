@@ -92,7 +92,7 @@ function List() {
       userInfo.subs = userInfo.subs || [];
       setCurrentUser(userInfo);
       if (!suberId || userInfo.subs.indexOf(+suberId) === -1) {
-        setSuberId(userInfo.subs.length ? userInfo.subs[0] : "2292705444");
+        // 不默认
       }
       if (!userInfo || userInfo.name === "guest") {
         fetchMsg();
@@ -106,7 +106,7 @@ function List() {
     try {
       setSpinning(true);
       const response = await request.get(
-        `/queryList?user=${user}&page=${page}`
+        `/queryList?user=${user || ''}&page=${page}`
       );
       setList(JSON.parse(response.data));
       setSpinning(false);
@@ -191,13 +191,12 @@ function List() {
   }
 
   useEffect(() => {
-    if (suberId) {
-      fetchPageList(suberId, page);
-    } else {
-      if (page > 1) {
-        message.warning("请先选择或搜索用户进行关注！");
-      }
-    }
+    fetchPageList(suberId, page);
+    // if (suberId) {} else {
+    //   if (page > 1) {
+    //     message.warning("请先选择或搜索用户进行关注！");
+    //   }
+    // }
   }, [page, suberId]);
 
   function handleChangeToSub(sub) {
@@ -241,7 +240,7 @@ function List() {
                 style={{ width: 130, marginRight: 10 }}
                 value={suberId}
                 onChange={handleChangeSuber}
-              >
+              ><option value="">全部</option>
                 {currentUser.subs.map((subId) => {
                   const u = userMap[subId];
                   if (!u) return null;
@@ -257,7 +256,7 @@ function List() {
                 style={{ width: 130, marginRight: 10 }}
                 value={suberId}
                 onChange={handleChangeSuber}
-              >
+              ><Select.Option value="">全部</Select.Option>
                 {currentUser.subs.map((subId) => {
                   const u = userMap[subId];
                   if (!u) return null;
@@ -326,25 +325,34 @@ function List() {
           if (!item) return null;
           return (
             <div className="card" key={item.id}>
-              <a
-                target="__blank"
-                href={`https://xueqiu.com/${item.author_id}/${item.id}`}
-              >
-                【原文】
-              </a>
-              <div>
-                {item.author} 发表于{" "}
-                {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
+              <div className="card-title">
+                <div className="card-head">
+                  <div>
+                    <img alt="头像" src={`https://xavatar.imedao.com/${item.headers.split(',')[2]}`}/>
+                  </div>
+                </div>
+                <div style={{ }}>
+                  <span>{item.author}</span>
+                  <div>
+                    <a
+                      target="__blank"
+                      href={`https://xueqiu.com/${item.author_id}/${item.id}`}
+                    >【原文】
+                    </a>发表于{" "}
+                    {moment(Number(item.created_at)).format("YY-MM-DD HH:mm")}{" "}
+                  </div>
+                </div>
               </div>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: item.text || item.description
-                }}
-              />
-              {item.description && item.firstImg ? (
-                <img alt="封面" src={item.firstImg} />
-              ) : null}
               <div>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: item.text || item.description
+                  }}
+                />
+                {item.description && item.firstImg ? (
+                  <img alt="封面" src={item.firstImg} />
+                ) : null}
+                <div>
                 <span
                   className="ant-btn-link link"
                   onClick={() => {
@@ -357,6 +365,7 @@ function List() {
                 >
                   【评论】
                 </span>
+                </div>
               </div>
             </div>
           );
