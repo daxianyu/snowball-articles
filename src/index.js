@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, Select, InputNumber, message, Spin, Popconfirm } from "antd";
+import { Button, InputNumber, message, Spin } from "antd";
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -32,7 +32,7 @@ request.interceptors.response.use((res) => {
 
 ReactDOM.render(
   <div className="App">
-    <h2>XUEQIU SNOWBALL</h2>
+    <h2>XUEQIU SNOWBALL 订阅</h2>
     <List />
   </div>,
   document.getElementById("root")
@@ -201,9 +201,9 @@ function List() {
 
   function handleChangeToSub(sub) {
     if (currentUser.name === "guest" && !currentUser.subs.length && sub) {
-      fetchPageList(sub.value, page);
+      fetchPageList(sub && sub.value, page);
     } else {
-      handleChangeSuber(sub.value)
+      handleChangeSuber(sub && sub.value)
     }
   }
 
@@ -232,83 +232,14 @@ function List() {
         />
       ) : null}
       <div>
-        <div style={{ display: subers.length ? "block" : "none" }}>
-          {(currentUser.subs.length &&
-            (isMobile ? (
-              <select
-                className="user-select"
-                style={{ width: 130, marginRight: 10 }}
-                value={suberId}
-                onChange={handleChangeSuber}
-              ><option value="">全部</option>
-                {currentUser.subs.map((subId) => {
-                  const u = userMap[subId];
-                  if (!u) return null;
-                  return (
-                    <option value={u.id} key={u.name}>
-                      {u.name}
-                    </option>
-                  );
-                })}
-              </select>
-            ) : (
-              <Select
-                style={{ width: 130, marginRight: 10 }}
-                value={suberId}
-                onChange={handleChangeSuber}
-              ><Select.Option value="">全部</Select.Option>
-                {currentUser.subs.map((subId) => {
-                  const u = userMap[subId];
-                  if (!u) return null;
-                  return (
-                    <Select.Option value={u.id} key={u.name}>
-                      {u.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            ))) ||
-          null}
-          {suberId && currentUser.subs.indexOf(+suberId) > -1 ? (
-            <Button.Group>
-              {currentUser.listen && currentUser.listen.indexOf(+suberId) > -1 ? (
-                <Popconfirm
-                  onConfirm={() => {
-                    unListen(suberId);
-                  }}
-                  title="确认？"
-                >
-                  <Button>取推</Button>
-                </Popconfirm>
-              ) : (
-                <Button
-                  onClick={() => {
-                    listen(suberId);
-                  }}
-                >
-                  推送
-                </Button>
-              )}
-              <Popconfirm
-                title="确认？"
-                onConfirm={() => {
-                  unSubscribe(suberId);
-                }}
-              >
-                <Button>取关</Button>
-              </Popconfirm>
-              <Button onClick={handleRefresh}>
-                {spinning ? <Spin /> : "刷新"}
-              </Button>
-            </Button.Group>
-          ) : null}
-        </div>
         <div style={{ marginTop: 10 }}>
           <SearchSelect
             style={{ width: 255, marginRight: 10 }}
             placeholder="🔍 搜索用户"
             preList={subers}
             user={currentUser}
+            selected={userMap[suberId] || suberId}
+            onRefresh={handleRefresh}
             onListen={listen}
             onUnListen={unListen}
             onSub={subscribe}

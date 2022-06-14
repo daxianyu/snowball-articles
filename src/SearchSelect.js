@@ -107,10 +107,20 @@ export default class SearchInput extends React.Component {
       <React.Fragment>
         <Button
           onClick={this.handleShowSearch}
-          style={{ width: 130, paddingLeft: 15 }}
+          style={{ width: 130, paddingLeft: 15, textAlign: 'left' }}
         >
-          {this.props.placeholder}
+          {this.props.selected && this.props.selected.name || this.props.placeholder}
         </Button>
+
+        <Button.Group style={{ marginLeft: 15 }}>
+          {this.props.selected ? (<Button onClick={this.handlePeep(null)}>
+            取消
+          </Button>) : null}
+          <Button onClick={this.props.onRefresh}>
+            刷新
+          </Button>
+        </Button.Group>
+        {/*{ this.props.selected ? : null}*/}
         <Modal
           visible={this.state.visible}
           title="搜索用户"
