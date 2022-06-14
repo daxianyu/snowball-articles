@@ -200,11 +200,11 @@ function List() {
   }, [page, suberId]);
 
   function handleChangeToSub(sub) {
-    if (currentUser.name === "guest" && !currentUser.subs.length && sub) {
-      fetchPageList(sub && sub.value, page);
-    } else {
-      handleChangeSuber(sub && sub.value)
-    }
+    // if (currentUser.name === "guest" && !currentUser.subs.length && sub) {
+    //   fetchPageList(sub && sub.value, page);
+    // } else {
+    handleChangeSuber(sub && sub.value)
+    // }
   }
 
   function handleRefresh() {
@@ -262,8 +262,8 @@ function List() {
                     <img alt="头像" src={`https://xavatar.imedao.com/${item.headers.split(',')[2]}`}/>
                   </div>
                 </div>
-                <div style={{ }}>
-                  <span>{item.author}</span>
+                <div >
+                  <span style={{ paddingLeft: 5 }}>{item.author}</span>
                   <div>
                     <a
                       target="__blank"

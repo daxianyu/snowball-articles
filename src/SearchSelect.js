@@ -107,7 +107,7 @@ export default class SearchInput extends React.Component {
       <React.Fragment>
         <Button
           onClick={this.handleShowSearch}
-          style={{ width: 130, paddingLeft: 15, textAlign: 'left' }}
+          style={{ width: 130, paddingLeft: 10, overflow:'hidden', textAlign: 'left', textOverflow: 'ellipsis' }}
         >
           {this.props.selected && this.props.selected.name || this.props.placeholder}
         </Button>
