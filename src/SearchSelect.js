@@ -40,19 +40,30 @@ export default class SearchInput extends React.Component {
     data: [],
     value: undefined,
     loading: false,
-    prelist: [],
+    preList: [],
     searched: false,
     visible: false
   };
 
   static getDerivedStateFromProps(props, state) {
-    const prelist = props.preList.map((s) => ({
+    const preList = props.preList.map((s) => ({
       text: s.name,
       value: `${s.id}`
     }));
+    if (
+      props.preList && props.preList.length
+      && props.user && props.user.subs && props.user.subs.length
+    ) {
+      const subs = ((props.user||{}).subs || []).slice().reverse();
+      preList.sort((prev, next) => subs.indexOf(+next.value) - subs.indexOf(+prev.value));
+      return {
+        data: state.searched ? state.data : preList,
+        preList: preList
+      };
+    }
     return {
-      data: state.searched ? state.data : prelist,
-      prelist
+      data: state.searched ? state.data : preList,
+      preList: preList
     };
   }
 
@@ -60,13 +71,15 @@ export default class SearchInput extends React.Component {
     const value = e.target.value;
     this.setState({ value })
     if (!value || !value.trim()) {
-      this.setState({ data: [...this.state.prelist] });
+      this.setState({ data: [...this.state.preList] });
     } else {
       this.setState({ loading: true, searched: true });
       fetch(value, (data) => {
         if (value !== (this.state.value || '').trim()) {
           return;
         }
+        const listen = (this.props.user || {}).listen || [];
+        data.sort((prev, next) => listen.indexOf(prev.value) - listen.indexOf((next.value)))
         this.setState({ data, loading: false });
       });
     }

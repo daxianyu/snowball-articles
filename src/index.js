@@ -111,6 +111,7 @@ function List() {
       setList(JSON.parse(response.data));
       setSpinning(false);
     } catch (err) {
+      setSpinning(false);
       console.log(err);
     }
   }
@@ -128,6 +129,7 @@ function List() {
           `/subscribe`,
           JSON.stringify({ id: subId, name: name })
         );
+        message.success("关注成功");
         await fetchUserList();
         await fetchCurrentUser();
       } catch (err) {
@@ -158,6 +160,7 @@ function List() {
     async function listenFetch() {
       try {
         await request.post(`/listen`, JSON.stringify({ id: subId }));
+        message.success("已加推送");
         await fetchCurrentUser();
       } catch (err) {
         message.error(err.message);
