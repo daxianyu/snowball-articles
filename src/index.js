@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Axios } from "axios";
-import { Button, InputNumber, message, Spin } from "antd";
+import { Button, InputNumber, message, Spin, Image } from "antd";
+import { UpCircleOutlined, RedoOutlined, DownCircleOutlined } from '@ant-design/icons'
 import "antd/dist/antd.css";
 import "./index.css";
 import moment from "moment";
@@ -32,7 +33,7 @@ request.interceptors.response.use((res) => {
 
 ReactDOM.render(
   <div className="App">
-    <h2>XUEQIU SNOWBALL 订阅</h2>
+    <h2 id="title">XUEQIU SNOWBALL 订阅</h2>
     <List />
   </div>,
   document.getElementById("root")
@@ -284,7 +285,7 @@ function List() {
                   }}
                 />
                 {item.description && item.firstImg ? (
-                  <img alt="封面" src={item.firstImg} />
+                  <Image alt="封面" src={item.firstImg} width={200} />
                 ) : null}
                 <div>
                 <span
@@ -370,6 +371,16 @@ function List() {
               {moment(currentUser.expired_at).format("YYYY-MM-DD HH:mm")}
             </span>
           )}
+        </div>
+        <span id="footer" />
+        <div className="widget">
+          <a href="#title">
+            <UpCircleOutlined className="widget-item"/>
+          </a>
+          <RedoOutlined className="widget-item" onClick={handleRefresh}/>
+          <a href="#footer">
+            <DownCircleOutlined className="widget-item"/>
+          </a>
         </div>
         <Login visible={loginVisible} onChangeVisibility={setLoginVisibility} />
       </div>
