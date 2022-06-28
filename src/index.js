@@ -81,6 +81,13 @@ function List() {
       message.info(response.data, 5);
     }
   }
+  
+  async function fetchMsg0() {
+    const response = await request.get("/msg0");
+    if (response.data) {
+      message.info(response.data, 3);
+    }
+  }
 
   async function fetchCurrentUser() {
     try {
@@ -121,6 +128,7 @@ function List() {
   useEffect(() => {
     fetchUserList();
     fetchCurrentUser();
+    fetchMsg0();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function subscribe(subId, name) {
