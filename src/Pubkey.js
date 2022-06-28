@@ -50,7 +50,7 @@ export default function Pubkey(props) {
         <div>
           <span>
             首先在应用商店下载pushdeer软件; 安卓用户点击
-            <a target="__blank" href="./pushdeer-alpha-5.apk">
+            <a target="__blank" href="./pushdeer-alpha-6.apk">
               下载
             </a>
             安装文件 ，务必允许推送
