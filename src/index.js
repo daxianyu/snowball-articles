@@ -295,20 +295,6 @@ function List() {
                 {item.description && item.firstImg ? (
                   <Image alt="封面" src={item.firstImg} width={200} />
                 ) : null}
-//                 <div>
-//                 <span
-//                   className="ant-btn-link link"
-//                   onClick={() => {
-//                     setCommentInfo({
-//                       visible: true,
-//                       id: item.id,
-//                       url: `https://sbservice.daxianyu.cn/comments/${item.id}`
-//                     });
-//                   }}
-//                 >
-//                   【评论】
-//                 </span>
-//                 </div>
               </div>
             </div>
           );
