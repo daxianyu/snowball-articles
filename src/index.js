@@ -355,6 +355,11 @@ function List() {
             </Button>
           )}
           {currentUser && currentUser.name && currentUser.name !== "guest" && (
+            <span>
+              用户名：{currentUser.name}
+            </span>
+          )}
+          {currentUser && currentUser.name && currentUser.name !== "guest" && (
             <Button type="link" onClick={() => handleLogout()}>
               注销
             </Button>
