@@ -170,24 +170,6 @@ export default class SearchInput extends React.Component {
                   </Typography.Text>
                   <Button.Group>
                     {
-                      isSubed ? (
-                        <Popconfirm
-                          onConfirm={() => {
-                            this.handleUnSubscribe(subId)
-                          }}
-                          title="确认？"
-                        >
-                          <Button type="primary" size="small">
-                            取关
-                          </Button>
-                        </Popconfirm>
-                      ) : (
-                        <Button size="small" onClick={() => this.handleSubscribe(subId, item.text)}>
-                          关注
-                        </Button>
-                      )
-                    }
-                    {
                       isListened ? (
                         <Popconfirm
                           onConfirm={() => {
@@ -200,7 +182,7 @@ export default class SearchInput extends React.Component {
                           </Button>
                         </Popconfirm>
                       ) : (
-                        <Button size="small" onClick={() => this.handleListen(subId)} disabled={!isSubed}>
+                        <Button size="small" onClick={() => this.handleListen(subId)}>
                           推送
                         </Button>
                       )
