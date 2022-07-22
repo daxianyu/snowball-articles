@@ -52,10 +52,10 @@ export default class SearchInput extends React.Component {
     }));
     if (
       props.preList && props.preList.length
-      && props.user && props.user.subs && props.user.subs.length
+      && props.user && props.user.listen && props.user.listen.length
     ) {
-      const subs = ((props.user||{}).subs || []).slice().reverse();
-      preList.sort((prev, next) => subs.indexOf(+next.value) - subs.indexOf(+prev.value));
+      const listen = ((props.user||{}).listen || []).slice().reverse();
+      preList.sort((prev, next) => listen.indexOf(+next.value) - listen.indexOf(+prev.value));
       return {
         data: state.searched ? state.data : preList,
         preList: preList
@@ -98,8 +98,8 @@ export default class SearchInput extends React.Component {
     this.setState({ visible: false });
   };
 
-  handleListen = (subId) => {
-    this.props.onListen(subId);
+  handleListen = (subId, name) => {
+    this.props.onListen(subId, name);
   }
 
   handleUnListen = (subId) => {
@@ -122,7 +122,7 @@ export default class SearchInput extends React.Component {
           onClick={this.handleShowSearch}
           style={{ width: 130, paddingLeft: 10, overflow:'hidden', textAlign: 'left', textOverflow: 'ellipsis' }}
         >
-          {this.props.selected && this.props.selected.name || this.props.placeholder}
+          {this.props.selected ? this.props.selected.name : this.props.placeholder}
         </Button>
 
         <Button.Group style={{ marginLeft: 15 }}>
@@ -160,8 +160,9 @@ export default class SearchInput extends React.Component {
             dataSource={this.state.data}
             renderItem={(item) => {
               const isListened = listen.indexOf(+item.value) > -1;
-              const isSubed = subs.indexOf(+item.value) > -1;
+              // const isSubed = subs.indexOf(+item.value) > -1;
               const subId = item.value;
+              const name = item.text;
 
               return (
                 <List.Item style={{ padding: '4px 8px'}}>
@@ -182,11 +183,29 @@ export default class SearchInput extends React.Component {
                           </Button>
                         </Popconfirm>
                       ) : (
-                        <Button size="small" onClick={() => this.handleListen(subId)}>
+                        <Button size="small" onClick={() => this.handleListen(subId, name)}>
                           推送
                         </Button>
                       )
                     }
+                    {/*{*/}
+                    {/*  isSubed ? (*/}
+                    {/*    <Popconfirm*/}
+                    {/*      onConfirm={() => {*/}
+                    {/*        this.handleUnSubscribe(subId)*/}
+                    {/*      }}*/}
+                    {/*      title="确认？"*/}
+                    {/*    >*/}
+                    {/*      <Button type="primary" size="small">*/}
+                    {/*        取关*/}
+                    {/*      </Button>*/}
+                    {/*    </Popconfirm>*/}
+                    {/*  ) : (*/}
+                    {/*    <Button size="small" onClick={() => this.handleSubscribe(subId, name)}>*/}
+                    {/*      关注*/}
+                    {/*    </Button>*/}
+                    {/*  )*/}
+                    {/*}*/}
                   </Button.Group>
                 </List.Item>
               );

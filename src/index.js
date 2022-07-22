@@ -81,7 +81,7 @@ function List() {
       message.info(response.data, 5);
     }
   }
-  
+
   async function fetchMsg0() {
     const response = await request.get("/msg0");
     if (response.data) {
@@ -161,16 +161,17 @@ function List() {
     // unListen(subId);
   }
 
-  function listen(subId) {
+  function listen(subId, name) {
     if (!currentUser.key) {
       setPushVisibility(true);
       return;
     }
     async function listenFetch() {
       try {
-        await request.post(`/listen`, JSON.stringify({ id: subId }));
+        await request.post(`/listen`, JSON.stringify({ id: subId, name }));
         message.success("已加推送");
         await fetchCurrentUser();
+        await fetchUserList();
       } catch (err) {
         message.error(err.message);
       }
