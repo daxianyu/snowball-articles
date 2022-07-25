@@ -117,6 +117,7 @@ function List() {
         `/queryList?user=${user || ''}&page=${page}`
       );
       setList(JSON.parse(response.data));
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
       setSpinning(false);
     } catch (err) {
       setSpinning(false);
@@ -293,9 +294,14 @@ function List() {
                     __html: item.text || item.description
                   }}
                 />
-                {item.description && item.firstImg ? (
-                  <Image alt="封面" src={item.firstImg} width={200} />
-                ) : null}
+                <div>
+                  {(!item.text || item.text.indexOf('<') < 0) ?
+                    (item.pic ? item.pic.split(',').map(_ => <Image alt="封面" src={_.replace('!thumb.jpg', '')} width={200} />): null)
+                    : ''}
+                  {item.description && item.firstImg ? (
+                    <Image alt="封面" src={item.firstImg} width={200} />
+                  ) : null}
+                </div>
               </div>
             </div>
           );
